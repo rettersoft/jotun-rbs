@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { Button, Text, View } from 'react-native'
 
-import useRbs from '../hooks/useRbs'
+import useRio from '../hooks/useRio'
 import useAuth from '../hooks/useAuth'
 
 const ProfileScreen = () => {
-    const rbs = useRbs()
+    const rio = useRio()
     const auth = useAuth()
 
     const [profile, setProfile] = React.useState<any>(null)
@@ -19,7 +19,7 @@ const ProfileScreen = () => {
             <Button
                 title="Signout"
                 onPress={() => {
-                    rbs.signOut()
+                    rio.signOut()
                 }}
             />
             <Text>{JSON.stringify(profile)}</Text>

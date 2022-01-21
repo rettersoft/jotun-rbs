@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { RBSAuthStatus } from '@rettersoft/rbs-sdk'
+import { RetterAuthStatus } from '@retter/sdk'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import useAuth from './hooks/useAuth'
@@ -16,7 +16,7 @@ const StackNavigator = () => {
 
     return (
         <Stack.Navigator>
-            {auth.authStatus === RBSAuthStatus.SIGNED_IN ? (
+            {auth.authStatus === RetterAuthStatus.SIGNED_IN ? (
                 <>
                     <Stack.Screen name="Home" component={HOmeScreen} />
                     <Stack.Screen name="Profile" component={ProfileScreen} />

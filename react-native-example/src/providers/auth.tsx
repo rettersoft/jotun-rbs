@@ -1,8 +1,8 @@
 import { z } from 'zod'
 import * as React from 'react'
-import { RBSAuthChangedEvent, RBSAuthStatus, RBSCloudObject } from '@rettersoft/rbs-sdk'
+import { RetterAuthChangedEvent, RetterAuthStatus, RetterCloudObject } from '@retter/sdk'
 
-import useRbs from '../hooks/useRbs'
+import useRio from '../hooks/useRio'
 
 export const SignupInputProfile = z.object({
     firstName: z.string(),
@@ -26,8 +26,8 @@ export const SignupInput = z.object({
 export type SignupInput = z.infer<typeof SignupInput>
 
 export interface AuthContextProps {
-    authStatus: RBSAuthStatus
-    userObject: RBSCloudObject | null
+    authStatus: RetterAuthStatus
+    userObject: RetterCloudObject | null
     sendOtp: (msisdn: string) => Promise<any>
     validateOtp: (otp: string) => Promise<any>
     signUp: (form: SignupInput) => Promise<any>
@@ -42,18 +42,18 @@ export interface AuthContextProps {
 export const AuthContext = React.createContext<AuthContextProps | null>(null)
 
 export const AuthProvider: React.FC = ({ children }) => {
-    const rbs = useRbs()
-    const userObject = React.useRef<RBSCloudObject | null>(null)
-    const msisdnAuthenticatorObject = React.useRef<RBSCloudObject | null>(null)
+    const rio = useRio()
+    const userObject = React.useRef<RetterCloudObject | null>(null)
+    const msisdnAuthenticatorObject = React.useRef<RetterCloudObject | null>(null)
 
     const [roleState, setRoleState] = React.useState<any>({})
     const [userState, setUserState] = React.useState<any>({})
     const [publicState, setPublicState] = React.useState<any>({})
 
-    const [authStatus, setAuthStatus] = React.useState<RBSAuthStatus | null>(null)
+    const [authStatus, setAuthStatus] = React.useState<RetterAuthStatus | null>(null)
 
     const getUserObject = async (uid: string) => {
-        const obj = await rbs.getCloudObject({
+        const obj = await rio.getCloudObject({
             classId: 'User',
             instanceId: uid,
         })
@@ -67,20 +67,20 @@ export const AuthProvider: React.FC = ({ children }) => {
     }
 
     const getMsisdnAuthenticator = async (msisdn: string) => {
-        return await rbs.getCloudObject({
+        return await rio.getCloudObject({
             classId: 'MsisdnAuthenticator',
-            payload: {
+            body: {
                 msisdn,
             },
         })
     }
 
     React.useEffect(() => {
-        rbs.authStatus.subscribe(async ({ authStatus, uid }: RBSAuthChangedEvent) => {
+        rio.authStatus.subscribe(async ({ authStatus, uid }: RetterAuthChangedEvent) => {
             console.log('uid', uid)
             console.log('authStatus', authStatus)
             setAuthStatus(authStatus)
-            if (authStatus === RBSAuthStatus.SIGNED_IN) {
+            if (authStatus === RetterAuthStatus.SIGNED_IN) {
                 userObject.current = await getUserObject(uid!)
                 msisdnAuthenticatorObject.current = null
             } else {
@@ -95,7 +95,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
         return await msisdnAuthenticatorObject.current?.call({
             method: 'sendOtp',
-            payload: {
+            body: {
                 captcha: 'any', // not implemented
                 msisdn,
             },
@@ -105,7 +105,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     const validateOtp = async (otp: string): Promise<any> => {
         return await msisdnAuthenticatorObject.current?.call({
             method: 'validateOtp',
-            payload: {
+            body: {
                 captcha: 'any', // not implemented
                 otp,
             },
@@ -115,7 +115,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     const signUp = async (form: SignupInput): Promise<any> => {
         return await msisdnAuthenticatorObject.current?.call({
             method: 'signup',
-            payload: { ...form },
+            body: { ...form },
         })
     }
 

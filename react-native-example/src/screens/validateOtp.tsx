@@ -2,11 +2,11 @@ import * as React from 'react'
 import { Button, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
-import useRbs from '../hooks/useRbs'
+import useRio from '../hooks/useRio'
 import useAuth from '../hooks/useAuth'
 
 const ValidateOtpScreen = () => {
-    const rbs = useRbs()
+    const rio = useRio()
     const auth = useAuth()
     const navigation = useNavigation()
 
@@ -20,7 +20,7 @@ const ValidateOtpScreen = () => {
                 // @ts-ignore
                 navigation.navigate('SignUp', { signupToken: data.signupToken })
             } else if (data.message === 'auth_success') {
-                rbs.authenticateWithCustomToken(data.customToken)
+                rio.authenticateWithCustomToken(data.customToken)
             }
         } catch (error: any) {
             // incorrect_otp

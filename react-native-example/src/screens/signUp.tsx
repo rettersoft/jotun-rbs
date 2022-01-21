@@ -2,12 +2,12 @@ import * as React from 'react'
 import { Button, View } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 
-import useRbs from '../hooks/useRbs'
+import useRio from '../hooks/useRio'
 import useAuth from '../hooks/useAuth'
 import { SignupInput } from '../providers/auth'
 
 const SignUpScreen = () => {
-    const rbs = useRbs()
+    const rio = useRio()
     const auth = useAuth()
     const route = useRoute<any>()
 
@@ -33,7 +33,7 @@ const SignUpScreen = () => {
             const { data } = await auth.signUp(form)
             console.log(data)
             if (data?.message === 'signup_complete') {
-                rbs.authenticateWithCustomToken(data.customToken)
+                rio.authenticateWithCustomToken(data.customToken)
             }
         } catch (error: any) {
             if (error.response && error.response.data && error.response.data.validationErrors) {
