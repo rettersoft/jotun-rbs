@@ -25,6 +25,16 @@ export const SignupInput = z.object({
 
 export type SignupInput = z.infer<typeof SignupInput>
 
+export const UpdateProfileInput = z.object({
+    firstName: z.string(),
+    lastName: z.string(),
+    phoneNumber: z.string(),
+    email: z.string().optional(),
+    district: z.string().optional(),
+    province: z.string().optional(),
+})
+export type UpdateProfileInput = z.infer<typeof UpdateProfileInput>
+
 export interface AuthContextProps {
     authStatus: RetterAuthStatus
     userObject: RetterCloudObject | null
@@ -32,6 +42,7 @@ export interface AuthContextProps {
     validateOtp: (otp: string) => Promise<any>
     signUp: (form: SignupInput) => Promise<any>
     profile: () => Promise<any>
+    updateProfile: (form: UpdateProfileInput) => Promise<any>
     states: {
         role: any
         user: any
@@ -127,6 +138,15 @@ export const AuthProvider: React.FC = ({ children }) => {
         )?.data
     }
 
+    const updateProfile = async (form: UpdateProfileInput): Promise<any> => {
+        return (
+            await userObject.current?.call({
+                method: 'updateProfile',
+                body: form,
+            })
+        )?.data
+    }
+
     if (authStatus === null) return null
 
     return (
@@ -138,6 +158,7 @@ export const AuthProvider: React.FC = ({ children }) => {
                 validateOtp,
                 signUp,
                 profile,
+                updateProfile,
                 states: {
                     role: roleState,
                     user: userState,
