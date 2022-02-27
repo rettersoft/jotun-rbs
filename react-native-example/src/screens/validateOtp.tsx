@@ -10,7 +10,7 @@ const ValidateOtpScreen = () => {
     const auth = useAuth()
     const navigation = useNavigation()
 
-    const [otp] = React.useState('141414')
+    const [otp] = React.useState('1414')
 
     const validateOtp = React.useCallback(async () => {
         try {
