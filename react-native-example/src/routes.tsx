@@ -8,6 +8,7 @@ import SignUpScreen from './screens/signUp'
 import SendOtpScreen from './screens/sendOtp'
 import ProfileScreen from './screens/profile'
 import ValidateOtpScreen from './screens/validateOtp'
+import NotificationScreen from './screens/notifications'
 
 const Stack = createNativeStackNavigator()
 
@@ -20,6 +21,7 @@ const StackNavigator = () => {
                 <>
                     <Stack.Screen name="Home" component={HOmeScreen} />
                     <Stack.Screen name="Profile" component={ProfileScreen} />
+                    <Stack.Screen name="Notifications" component={NotificationScreen} />
                 </>
             ) : (
                 <>

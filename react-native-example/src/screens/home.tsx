@@ -21,6 +21,13 @@ const HomeScreen = () => {
                     navigation.navigate('Profile')
                 }}
             />
+            <Button
+                title="Notifications Page"
+                onPress={() => {
+                    // @ts-ignore
+                    navigation.navigate('Notifications')
+                }}
+            />
             <Text>{JSON.stringify(auth.states, null, 4)}</Text>
         </View>
     )
